@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>經費表檢查工具｜使用說明</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: Arial, "Noto Sans TC", sans-serif;
+      color: #5f3e36;
+      background: #f7f7f2;
+    }
+
+    .tutorial {
+      display: flex;
+      flex-direction: column;
+      min-height: min(490px, calc(100vh - 48px));
+      gap: 16px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-title {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .page-number {
+      font-size: 13px;
+      color: #82736c;
+      white-space: nowrap;
+    }
+
+    .slide {
+      display: none;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 21px;
+    }
+
+    .description {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.8;
+      white-space: pre-line;
+    }
+
+    .section {
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .image-container {
+      flex: 1;
+      min-height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: auto;
+      background: #e2e8d8;
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .tutorial-image {
+      display: block;
+      max-width: 100%;
+      max-height: 400px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 5px;
+    }
+
+    .image-placeholder {
+      color: #82736c;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 8px;
+      border-top: 1px solid #ddd8cf;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .nav-button,
+    .close-button {
+      border: none;
+      border-radius: 7px;
+      padding: 10px 16px;
+      background: #5f3e36;
+      color: white;
+    }
+
+    .nav-button:disabled {
+      background: #d5d0c8;
+      color: #82736c;
+      cursor: default;
+    }
+
+    .dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #d5d0c8;
+    }
+
+    .dot.active {
+      background: #5f3e36;
+      transform: scale(1.2);
+    }
+
+    .dot:focus-visible,
+    button:focus-visible {
+      outline: 2px solid #9b786c;
+      outline-offset: 3px;
+    }
+
+    .completion {
+      display: none;
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #5f3e36;
+    }
+
+    @media (max-height: 540px) {
+      body {
+        padding: 14px;
+      }
+
+      .tutorial {
+        min-height: 0;
+      }
+
+      .tutorial-image {
+        max-height: 180px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 14px;
+      }
+
+      .header-title {
+        font-size: 18px;
+      }
+
+      h2 {
+        font-size: 19px;
+      }
+
+      .footer {
+        gap: 8px;
+      }
+
+      .nav-button,
+      .close-button {
+        padding: 9px 10px;
+      }
+
+      .dots {
+        gap: 6px;
+      }
+
+      .tutorial-image {
+        max-height: 320px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="tutorial">
+    <header class="header">
+      <div class="header-title">經費表檢查工具</div>
+      <div class="page-number" id="pageNumber">1 / 8</div>
+    </header>
+
+    <!-- 第 1 頁 -->
+    <section class="slide active">
+      <h2>歡迎使用！</h2>
+      <p class="description">本工具協助你檢查申請書與經費表中的資料。
+請依照以下說明操作，並於檢查後人工確認結果。</p>
+
+      <div class="section">
+        <b>1. 確認工作表</b><br>
+        請勿任意更改工作表名稱及順序。
+      </div>
+
+      <div class="section">
+        <b>2. 執行檢查</b><br>
+        請透過「經費檢查工具」選單執行需要的功能。
+      </div>
+
+      <div class="section">
+        <b>3. 確認檢查結果</b><br>
+        檢查結果僅供核對，請依原始資料確認。
+      </div>
+    </section>
+
+    <!-- 第 2 頁 -->
+    <section class="slide">
+      <h2>第一步：輸入申請書資料</h2>
+      <p class="description">請在 B 欄輸入申請書資料，檢查結果會顯示在 C、D 欄。</p>
+
+      <div class="image-container">
+        <img
+          class="tutorial-image"
+          src="https://raw.githubusercontent.com/iihare/TutorialImg/main/images/step1.png"
+          alt="申請書資料示意圖"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+        >
+        <div class="image-placeholder" style="display:none;">
+          圖片無法載入，請確認 GitHub 圖片網址及公開權限。
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 3 頁 -->
+    <section class="slide">
+      <h2>第二步：輸入經費表資料</h2>
+      <p class="description">請在 A～H 欄輸入經費明細表資料，檢查結果會顯示在 J、K 欄。</p>
+
+      <div class="image-container">
+        <img
+          class="tutorial-image"
+          src="https://raw.githubusercontent.com/iihare/TutorialImg/main/images/step2.png"
+          alt="經費表資料示意圖"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+        >
+        <div class="image-placeholder" style="display:none;">
+          圖片無法載入，請確認 GitHub 圖片網址及公開權限。
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 4 頁 -->
+    <section class="slide">
+      <h2>第三步：執行檢查</h2>
+      <p class="description">點選試算表上方的「經費檢查工具」選單，
+再選擇需要執行的檢查功能。</p>
+
+      <div class="image-container">
+        <img
+          class="tutorial-image"
+          src="https://raw.githubusercontent.com/iihare/TutorialImg/main/images/step3.png"
+          alt="執行檢查示意圖"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+        >
+        <div class="image-placeholder" style="display:none;">
+          圖片無法載入，請確認 GitHub 圖片網址及公開權限。
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 5 頁 -->
+    <section class="slide">
+      <h2>權限設定（第一次執行時設定）</h2>
+      <p class="description">1. 第一次執行「經費檢查工具」時，會出現「需要授權」的視窗。</p>
+
+      <div class="image-container">
+        <img
+          class="tutorial-image"
+          src="https://raw.githubusercontent.com/iihare/TutorialImg/main/images/step4.png"
+          alt="設定權限示意圖 1"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+        >
+        <div class="image-placeholder" style="display:none;">
+          圖片無法載入，請確認 GitHub 圖片網址及公開權限。
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 6 頁 -->
+    <section class="slide">
+      <h2>權限設定（第一次執行時設定）</h2>
+      <p class="description">2. 請點選「確定」後，點選左下「進階設定」，再點選下方「前往多元發展補助（不安全）」。</p>
+
+      <div class="image-container">
+        <img
+          class="tutorial-image"
+          src="https://raw.githubusercontent.com/iihare/TutorialImg/main/images/step5.png"
+          alt="設定權限示意圖 2"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+        >
+        <div class="image-placeholder" style="display:none;">
+          圖片無法載入，請確認 GitHub 圖片網址及公開權限。
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 7 頁 -->
+    <section class="slide">
+      <h2>權限設定（第一次執行時設定）</h2>
+      <p class="description">3. 勾選「全選」並繼續。</p>
+
+      <div class="image-container">
+        <img
+          class="tutorial-image"
+          src="https://raw.githubusercontent.com/iihare/TutorialImg/main/images/step6.png"
+          alt="設定權限示意圖 3"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+        >
+        <div class="image-placeholder" style="display:none;">
+          圖片無法載入，請確認 GitHub 圖片網址及公開權限。
+        </div>
+      </div>
+    </section>
+
+    <!-- 第 8 頁 -->
+    <section class="slide">
+      <h2>第四步：確認檢查結果</h2>
+      <p class="description">點選「開始檢查」後，等待程式執行。</p>
+      <p class="description">請查看程式標示的差異，並回到原始資料核對。
+檢查結果僅供輔助，不代表系統已判定資料一定正確或錯誤。</p>
+
+      <div class="image-container">
+        <img
+          class="tutorial-image"
+          src="https://raw.githubusercontent.com/iihare/TutorialImg/main/images/step7.png"
+          alt="檢查結果示意圖 1"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+        >
+        <div class="image-placeholder" style="display:none;">
+          圖片無法載入，請確認 GitHub 圖片網址及公開權限。
+        </div>
+      </div>
+
+      <div class="image-container">
+        <img
+          class="tutorial-image"
+          src="https://raw.githubusercontent.com/iihare/TutorialImg/main/images/step8.png"
+          alt="檢查結果示意圖 2"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+        >
+        <div class="image-placeholder" style="display:none;">
+          圖片無法載入，請確認 GitHub 圖片網址及公開權限。
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <button
+        type="button"
+        class="nav-button"
+        id="prevButton"
+        onclick="changePage(-1)"
+      >上一頁</button>
+
+      <div class="dots" id="dots" aria-label="教學頁面"></div>
+
+      <button
+        type="button"
+        class="nav-button"
+        id="nextButton"
+        onclick="changePage(1)"
+      >下一頁</button>
+    </footer>
+
+    <div style="text-align:right;">
+      <button
+        type="button"
+        class="close-button"
+        onclick="closeTutorial()"
+      >完成閱讀</button>
+    </div>
+
+    <p class="completion" id="completionMessage" role="status">
+      教學已完成！你可以直接關閉此瀏覽器分頁，返回試算表。
+    </p>
+  </main>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const dotsContainer = document.getElementById('dots');
+    const pageNumber = document.getElementById('pageNumber');
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
+    const completionMessage = document.getElementById('completionMessage');
+
+    let currentPage = 0;
+
+    // 自動建立頁面導覽圓點
+    slides.forEach((slide, index) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'dot';
+      dot.setAttribute('aria-label', `前往第 ${index + 1} 頁`);
+      dot.title = `第 ${index + 1} 頁`;
+      dot.addEventListener('click', () => showPage(index));
+      dotsContainer.appendChild(dot);
+    });
+
+    const dots = Array.from(dotsContainer.children);
+
+    function showPage(index) {
+      currentPage = Math.max(0, Math.min(index, slides.length - 1));
+
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === currentPage);
+      });
+
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentPage);
+
+        if (i === currentPage) {
+          dot.setAttribute('aria-current', 'step');
+        } else {
+          dot.removeAttribute('aria-current');
+        }
+      });
+
+      pageNumber.textContent = `${currentPage + 1} / ${slides.length}`;
+      prevButton.disabled = currentPage === 0;
+      nextButton.disabled = currentPage === slides.length - 1;
+    }
+
+    function changePage(direction) {
+      showPage(currentPage + direction);
+    }
+
+    function closeTutorial() {
+      completionMessage.style.display = 'block';
+    }
+
+    // 初始化頁面狀態
+    showPage(0);
+  </script>
+</body>
+</html>
